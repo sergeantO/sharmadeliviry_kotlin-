@@ -1,0 +1,44 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "gradle",
+			"id": "/home/odmen/Documents/sharmadeliviry_kotlinkoverHtmlReportsharmadeliviry",
+			"script": "koverHtmlReport",
+			"description": "Task to generate HTML coverage report for all code.",
+			"group": "build",
+			"project": "sharmadeliviry",
+			"buildFile": "/home/odmen/Documents/sharmadeliviry_kotlin/build.gradle.kts",
+			"rootProject": "sharmadeliviry",
+			"projectFolder": "/home/odmen/Documents/sharmadeliviry_kotlin",
+			"workspaceFolder": "/home/odmen/Documents/sharmadeliviry_kotlin",
+			"args": "",
+			"javaDebug": false,
+			"problemMatcher": [
+				"$gradle"
+			],
+			"label": "gradle: koverHtmlReport"
+		},
+		{
+			"type": "gradle",
+			"id": "/home/odmen/Documents/sharmadeliviry_kotlinbuildsharmadeliviry",
+			"script": "build",
+			"description": "Assembles and tests this project.",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"project": "sharmadeliviry",
+			"buildFile": "/home/odmen/Documents/sharmadeliviry_kotlin/build.gradle.kts",
+			"rootProject": "sharmadeliviry",
+			"projectFolder": "/home/odmen/Documents/sharmadeliviry_kotlin",
+			"workspaceFolder": "/home/odmen/Documents/sharmadeliviry_kotlin",
+			"args": "",
+			"javaDebug": false,
+			"problemMatcher": [
+				"$gradle"
+			],
+			"label": "gradle: build"
+		}
+	]
+}
