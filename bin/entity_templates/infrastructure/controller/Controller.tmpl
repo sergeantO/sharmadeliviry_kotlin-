@@ -30,12 +30,12 @@ class ${ENTITY}Controller(
     @GetMapping("/{id}")
     suspend fun get(@PathVariable("id") id: String): ResponseEntity<${ENTITY}Model> {
         val get${ENTITY}Query = Get${ENTITY}Query()
-        val innerId = QwertyId(UUID.fromString(id))
+        val innerId = ${ENTITY}Id(UUID.fromString(id))
         return get${ENTITY}Query.execute(${ENTITY_LOWERCASE}ReadRepo, innerId)
     }
 
     @PostMapping()
-    suspend fun create(@RequestBody body: /** open api type */): ResponseEntity<${ENTITY}Model> {
+    suspend fun create(@RequestBody body: Any /** open api type */): ResponseEntity<${ENTITY}Model> {
         val create${ENTITY}Command = Create${ENTITY}Command()
         return create${ENTITY}Command.execute(${ENTITY_LOWERCASE}WriteRepo, body)
     }
