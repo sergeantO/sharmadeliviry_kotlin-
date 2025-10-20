@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.context.annotation.Primary
 
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.Create${ENTITY}Model
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Id
 
@@ -18,7 +19,7 @@ class ${ENTITY}JooqWriteRepo : ${ENTITY}WriteRepo {
         TODO("not implemented")
     }
 
-    override suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
+    override suspend fun get(id: ${ENTITY}Id): ${ENTITY}Model? {
         return items.find { it.id == id }
     }
 }
