@@ -43,7 +43,13 @@
 Фактически, слой application будут представлять команды и запросы CQRS. А репозитории станут нашими outbound портами
 
 ### Contract Lock-In
-Ключевая особенность шаблона — подход, который я называю **"запирание между контрактами" (Contract Lock-In)**, который комбинирует преимущества contract-first и model-first разработки:
+Ключевая особенность шаблона — подход, который я называю **"запирание между контрактами" (Contract Lock-In)**, который комбинирует преимущества contract-first и model-first разработки. 
+
+Кто не знаком с этими понятиями, вот ссылочки:
+- [Habr. «Истина в последней инстанции» или зачем нужен Database First Design](https://habr.com/ru/articles/413597/) 
+- [YouTube. Contract first principle при работе с API](https://youtu.be/-mzzT0b9K54?si=S7yE6CvSMjEXrqdZ) 
+
+Что мы получаем:
 - JOOQ генерирует типы из схемы базы данных
 - OpenAPI Generator генерирует клиентские DTO из спецификации API
 - Domain Model остается чистым и стабильным ядром
