@@ -163,3 +163,9 @@ tasks.named("compileKotlin") {
     dependsOn("openApiGenerate")
     dependsOn(tasks.filter { it.name.startsWith("jooqCodegen") }.toTypedArray())
 }
+
+tasks.register("printGroup") {
+    doLast {
+        println(project.group)
+    }
+}

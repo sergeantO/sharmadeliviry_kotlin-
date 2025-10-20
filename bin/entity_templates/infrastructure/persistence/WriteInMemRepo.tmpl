@@ -1,0 +1,24 @@
+package ${PACKAGE}.persistence.${ENTITY_LOWERCASE}
+
+import org.springframework.stereotype.Repository
+
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY_LOWERCASE}Id
+
+@Repository
+class ${ENTITY}InMemWriteRepo : ${ENTITY}WriteRepo {
+    
+    private val items = mutableListOf<${ENTITY}Model>()
+
+    /** Создать запись */
+    suspend fun create(id: ${ENTITY}Id, createModel: Create${ENTITY}Model): ${ENTITY}Model {
+        val newItem = ${ENTITY}Model(id, createModel.name)
+        items.add(newItem)
+        return newItem
+    }
+
+    suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
+        return items.find { it.id == ${ENTITY_LOWERCASE}Id }
+    }
+}

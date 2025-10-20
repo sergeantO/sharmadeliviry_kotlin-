@@ -1,0 +1,9 @@
+package ${PACKAGE}.application.${ENTITY_LOWERCASE}
+
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Id
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+
+interface ${ENTITY}ReadRepo {
+    /** получить запись */
+    suspend fun get(id: ${ENTITY}Id): ${ENTITY}Model?
+}

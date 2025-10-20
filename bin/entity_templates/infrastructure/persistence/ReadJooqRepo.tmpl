@@ -1,0 +1,19 @@
+package ${PACKAGE}.persistence.${ENTITY_LOWERCASE}
+
+import org.springframework.stereotype.Repository
+import org.springframework.context.annotation.Primary
+
+import ${PACKAGE}.application.${ENTITY_LOWERCASE}.${ENTITY}ReadRepo
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY_LOWERCASE}Id
+
+@Primary
+@Repository
+class ${ENTITY}JooqReadRepo : ${ENTITY}ReadRepo {
+    
+    private val items = mutableListOf<${ENTITY}Model>()
+
+    suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
+        TODO("not implemented")
+    }
+}

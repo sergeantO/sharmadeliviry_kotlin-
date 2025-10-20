@@ -1,0 +1,14 @@
+package ${PACKAGE}.domain.${ENTITY_LOWERCASE}
+
+import java.util.UUID
+
+@JvmInline value class ${ENTITY}Id(val id: UUID)
+
+data class ${ENTITY}Model(
+    val id: ${ENTITY}Id,
+    val name: String,
+)
+
+data class Create${ENTITY}Model(
+   val name: String,
+)

@@ -1,0 +1,13 @@
+package ${PACKAGE}.application.command.${ENTITY_LOWERCASE}
+
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.Create${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+
+class Create${ENTITY}Command {
+    suspend fun execute(${ENTITY_LOWERCASE}WriteRepo: ${ENTITY}WriteRepo, body: Create${ENTITY}Model): ${ENTITY}Model {
+        val id = ${ENTITY_LOWERCASE}WriteRepo.getNextId()
+        val result = ${ENTITY_LOWERCASE}WriteRepo.create(id, body)
+        return result
+    }
+}

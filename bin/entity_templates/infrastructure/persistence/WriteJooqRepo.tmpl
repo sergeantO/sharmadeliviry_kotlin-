@@ -1,0 +1,24 @@
+package ${PACKAGE}.persistence.${ENTITY_LOWERCASE}
+
+import org.springframework.stereotype.Repository
+import org.springframework.context.annotation.Primary
+
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY_LOWERCASE}Id
+
+@Primary
+@Repository
+class ${ENTITY}JooqWriteRepo : ${ENTITY}WriteRepo {
+    
+    private val items = mutableListOf<${ENTITY}Model>()
+
+    /** Создать запись */
+    suspend fun create(id: ${ENTITY}Id, createModel: Create${ENTITY}Model): ${ENTITY}Model {
+        TODO("not implemented")
+    }
+
+    suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
+        return items.find { it.id == ${ENTITY_LOWERCASE}Id }
+    }
+}
