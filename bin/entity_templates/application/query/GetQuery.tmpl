@@ -4,7 +4,7 @@ import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.Create${ENTITY}Model
 import ${PACKAGE}.application.${ENTITY_LOWERCASE}.${ENTITY}ReadRepo
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
 
-class Get${ENTITY}Command {
+class Get${ENTITY}Query {
     suspend fun execute(${ENTITY_LOWERCASE}ReadRepo: ${ENTITY}WriteRepo, id: ${ENTITY}Id): ${ENTITY}Model? {
         val result = ${ENTITY_LOWERCASE}ReadRepo.get(id)
         return result
