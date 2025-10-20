@@ -11,7 +11,7 @@ class ${ENTITY}InMemReadRepo : ${ENTITY}ReadRepo {
     
     private val items = mutableListOf<${ENTITY}Model>()
 
-    suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
+    override suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
         return items.find { it.id == ${ENTITY_LOWERCASE}Id }
     }
 }

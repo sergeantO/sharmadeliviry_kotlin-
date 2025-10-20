@@ -1,11 +1,12 @@
 package ${PACKAGE}.application.${ENTITY_LOWERCASE}.query
 
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.Create${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Id
 import ${PACKAGE}.application.${ENTITY_LOWERCASE}.${ENTITY}ReadRepo
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
 
 class Get${ENTITY}Query {
-    suspend fun execute(${ENTITY_LOWERCASE}ReadRepo: ${ENTITY}WriteRepo, id: ${ENTITY}Id): ${ENTITY}Model? {
+    suspend fun execute(${ENTITY_LOWERCASE}ReadRepo: ${ENTITY}ReadRepo, id: ${ENTITY}Id): ${ENTITY}Model? {
         val result = ${ENTITY_LOWERCASE}ReadRepo.get(id)
         return result
     }

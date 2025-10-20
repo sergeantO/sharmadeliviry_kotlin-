@@ -1,6 +1,7 @@
 
 package ${PACKAGE}.infrastructure.controller
 
+import java.util.UUID
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 
+import com.example.domain.${ENTITY_LOWERCASE}.${ENTITY}Id
+import com.example.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
 import ${PACKAGE}.application.${ENTITY_LOWERCASE}.${ENTITY}ReadRepo
 import ${PACKAGE}.application.${ENTITY_LOWERCASE}.command.Create${ENTITY}Command
@@ -25,13 +28,14 @@ class ${ENTITY}Controller(
     private val log = LoggerFactory.getLogger(${ENTITY}Controller::class.java)
 
     @GetMapping("/{id}")
-    suspend fun get(@PathVariable("id") id: String): ResponseEntity<${ENTITY_LOWERCASE}> {
+    suspend fun get(@PathVariable("id") id: String): ResponseEntity<${ENTITY}Model> {
         val get${ENTITY}Query = Get${ENTITY}Query()
-        return get${ENTITY_LOWERCASE}Query.execute(${ENTITY_LOWERCASE}ReadRepo, id)
+        val innerId = QwertyId(UUID.fromString(id))
+        return get${ENTITY}Query.execute(${ENTITY_LOWERCASE}ReadRepo, innerId)
     }
 
     @PostMapping()
-    suspend fun create(@RequestBody body: /** open api type */): ResponseEntity<${ENTITY_LOWERCASE}> {
+    suspend fun create(@RequestBody body: /** open api type */): ResponseEntity<${ENTITY}Model> {
         val create${ENTITY}Command = Create${ENTITY}Command()
         return create${ENTITY}Command.execute(${ENTITY_LOWERCASE}WriteRepo, body)
     }

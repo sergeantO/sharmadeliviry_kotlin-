@@ -14,11 +14,11 @@ class ${ENTITY}JooqWriteRepo : ${ENTITY}WriteRepo {
     private val items = mutableListOf<${ENTITY}Model>()
 
     /** Создать запись */
-    suspend fun create(id: ${ENTITY}Id, createModel: Create${ENTITY}Model): ${ENTITY}Model {
+    override suspend fun create(id: ${ENTITY}Id, createModel: Create${ENTITY}Model): ${ENTITY}Model {
         TODO("not implemented")
     }
 
-    suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
+    override suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
         return items.find { it.id == ${ENTITY_LOWERCASE}Id }
     }
 }
