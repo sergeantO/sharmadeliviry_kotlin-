@@ -5,11 +5,11 @@ import java.util.UUID
 interface ${ENTITY}WriteRepo {
 
     /** Сгенерировать новый id */
-    suspend fun getNextId(): UUID = ${ENTITY}Id(UUID.randomUUID())
+    suspend fun getNextId(): ${ENTITY}Id = ${ENTITY}Id(UUID.randomUUID())
 
     /** Создать запись */
     suspend fun create(id: ${ENTITY}Id, createModel: Create${ENTITY}Model): ${ENTITY}Model
 
     /** Получить запись */
-    suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model?
+    suspend fun get(id: ${ENTITY}Id): ${ENTITY}Model?
 }
