@@ -51,6 +51,7 @@ tasks.clean {
 dependencies {
     // base
     implementation("org.springframework.boot:spring-boot-starter-jooq")
+    implementation("org.jooq:jooq-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -58,6 +59,7 @@ dependencies {
     // reactive
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     runtimeOnly("org.postgresql:r2dbc-postgresql")
 
@@ -131,6 +133,10 @@ jooq {
             }
             generate {
                 isPojosAsKotlinDataClasses = true
+                // без этого все поля будут nullable
+                kotlinNotNullPojoAttributes = true
+                kotlinNotNullRecordAttributes = true
+                kotlinNotNullInterfaceAttributes = true
             }
         }
     }
@@ -144,7 +150,9 @@ openApiGenerate {
     apiPackage = "com.example.generated.api"
     modelPackage = "com.example.generated.model"
     configOptions = mapOf(
+        "reactive" to "true",
         "interfaceOnly" to "true",
+        "skipDefaultInterface" to "true",
         "useSpringBoot3" to "true",
         "useTags" to "true"
     )
