@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.delivery
+package com.example.domain.delivery
 
 interface DeliveryRepo {
     fun save(delivery: DeliveryModel): DeliveryModel

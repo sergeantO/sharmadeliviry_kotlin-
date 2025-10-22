@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.delivery
+package com.example.domain.delivery
 
 open class DeliveryInterractor(private val repo: DeliveryRepo) {
     fun createDelivery(delivery: DeliveryModel): DeliveryModel = repo.save(delivery)

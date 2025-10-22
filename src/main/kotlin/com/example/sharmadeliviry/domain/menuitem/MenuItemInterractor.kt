@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.menuitem
+package com.example.domain.menuitem
 
 open class MenuItemInterractor(private val repo: MenuItemRepo) {
     fun createMenuItemModel(menuItem: MenuItemModel): MenuItemModel = repo.save(menuItem)

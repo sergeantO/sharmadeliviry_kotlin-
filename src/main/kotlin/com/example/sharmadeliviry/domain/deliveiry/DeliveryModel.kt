@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.delivery
+package com.example.domain.delivery
 
 import java.time.LocalDateTime
 import org.springframework.core.annotation.Order

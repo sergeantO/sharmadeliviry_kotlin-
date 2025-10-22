@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.menuitem
+package com.example.domain.menuitem
 
 interface MenuItemRepo {
     fun save(menuItem: MenuItemModel): MenuItemModel

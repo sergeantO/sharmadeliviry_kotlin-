@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.order
+package com.example.domain.order
 
 enum class OrderStatus {
     NEW,

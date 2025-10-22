@@ -73,6 +73,7 @@ dependencies {
     implementation("jakarta.validation:jakarta.validation-api")
     implementation("jakarta.annotation:jakarta.annotation-api:2.1.0")
     implementation("io.swagger.core.v3:swagger-annotations:2.2.39")
+    implementation("io.swagger.core.v3:swagger-models:2.2.39")
 
     // TESTS
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -159,10 +160,10 @@ openApiGenerate {
 }
 
 // компиляция зависит от генерации openApi и jooqCodegen
-tasks.named("compileKotlin") {
-    dependsOn("openApiGenerate")
-    dependsOn(tasks.filter { it.name.startsWith("jooqCodegen") }.toTypedArray())
-}
+// tasks.named("compileKotlin") {
+//     dependsOn("openApiGenerate")
+//     dependsOn(tasks.filter { it.name.startsWith("jooqCodegen") }.toTypedArray())
+// }
 
 tasks.register("printGroup") {
     doLast {

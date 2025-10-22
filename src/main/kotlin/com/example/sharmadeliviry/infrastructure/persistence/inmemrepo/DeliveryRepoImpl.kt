@@ -1,7 +1,7 @@
-package com.example.sharmadeliviry.persistence.inmemrepo
+package com.example.persistence.inmemrepo
 
-import com.example.sharmadeliviry.domain.delivery.DeliveryModel
-import com.example.sharmadeliviry.domain.delivery.DeliveryRepo
+import com.example.domain.delivery.DeliveryModel
+import com.example.domain.delivery.DeliveryRepo
 import java.time.LocalDateTime
 import org.springframework.stereotype.Repository
 

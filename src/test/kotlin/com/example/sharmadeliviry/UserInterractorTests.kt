@@ -1,7 +1,7 @@
 package com.example.sharmadeliviry
 
-import com.example.sharmadeliviry.domain.user.*
-import com.example.sharmadeliviry.persistence.inmemrepo.UserRepoImpl
+import com.example.domain.user.*
+import com.example.persistence.inmemrepo.UserRepoImpl
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll

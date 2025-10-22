@@ -1,7 +1,7 @@
-package com.example.sharmadeliviry.persistence.inmemrepo
+package com.example.persistence.inmemrepo
 
-import com.example.sharmadeliviry.domain.user.UserModel
-import com.example.sharmadeliviry.domain.user.UserRepo
+import com.example.domain.user.UserModel
+import com.example.domain.user.UserRepo
 import org.springframework.stereotype.Repository
 
 @Repository

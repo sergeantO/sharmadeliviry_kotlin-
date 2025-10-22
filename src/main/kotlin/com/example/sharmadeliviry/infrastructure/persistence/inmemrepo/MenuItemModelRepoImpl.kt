@@ -1,8 +1,8 @@
-package com.example.sharmadeliviry.persistence.inmemrepo
+package com.example.persistence.inmemrepo
 
-import com.example.sharmadeliviry.domain.menuitem.MenuItemModel
-import com.example.sharmadeliviry.domain.menuitem.MenuItemRepo
-import com.example.sharmadeliviry.domain.menuitem.MenuSection
+import com.example.domain.menuitem.MenuItemModel
+import com.example.domain.menuitem.MenuItemRepo
+import com.example.domain.menuitem.MenuSection
 import org.springframework.stereotype.Repository
 
 @Repository

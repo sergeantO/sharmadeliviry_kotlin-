@@ -1,7 +1,7 @@
-package com.example.sharmadeliviry.application.command
+package com.example.application.command
 
-import com.example.sharmadeliviry.application.port.TransactionManager
-import com.example.sharmadeliviry.domain.user.UserModel
+import com.example.application.port.TransactionManager
+import com.example.domain.user.UserModel
 import kotlin.random.Random
 
 class CreateUserCommand {
@@ -38,11 +38,11 @@ data class CreateUserResponse(
 )
 
 private fun UserModel.toCreateUserResponse(): CreateUserResponse {
-        return CreateUserResponse(
-                id = id,
-                name = username,
-                email = email,
-                address = address,
-                tgName = tgName,
-        )
+    return CreateUserResponse(
+        id = id,
+        name = username,
+        email = email,
+        address = address,
+        tgName = tgName,
+    )
 }

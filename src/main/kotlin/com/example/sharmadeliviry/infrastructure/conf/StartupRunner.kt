@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.conf
+package com.example.conf
 
 import org.springframework.boot.CommandLineRunner
 

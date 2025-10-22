@@ -1,7 +1,7 @@
-package com.example.sharmadeliviry.application.query
+package com.example.application.query
 
-import com.example.sharmadeliviry.domain.user.UserModel
-import com.example.sharmadeliviry.domain.user.UserRepo
+import com.example.domain.user.UserModel
+import com.example.domain.user.UserRepo
 
 class GetUserQuery {
 

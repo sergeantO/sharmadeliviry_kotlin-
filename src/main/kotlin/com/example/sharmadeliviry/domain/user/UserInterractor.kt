@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.user
+package com.example.domain.user
 
 open class UserInterractor(private val repo: UserRepo) {
     fun createUser(user: UserModel): UserModel = repo.save(user)

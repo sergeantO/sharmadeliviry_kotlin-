@@ -1,7 +1,7 @@
-package com.example.sharmadeliviry.presentation.service
+package com.example.presentation.service
 
-import com.example.sharmadeliviry.domain.menuitem.MenuItemInterractor
-import com.example.sharmadeliviry.domain.menuitem.MenuItemRepo
+import com.example.domain.menuitem.MenuItemInterractor
+import com.example.domain.menuitem.MenuItemRepo
 import org.springframework.stereotype.Service
 
 @Service class MenuItemService(private val repo: MenuItemRepo) : MenuItemInterractor(repo) {}

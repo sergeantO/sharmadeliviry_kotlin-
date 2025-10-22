@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.menuitem
+package com.example.domain.menuitem
 
 data class MenuItemModel(
         val id: Long,

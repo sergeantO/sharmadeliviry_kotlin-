@@ -1,7 +1,7 @@
-package com.example.sharmadeliviry.domain.order
+package com.example.domain.order
 
-import com.example.sharmadeliviry.domain.menuitem.MenuItemModel
-import com.example.sharmadeliviry.domain.user.UserModel
+import com.example.domain.menuitem.MenuItemModel
+import com.example.domain.user.UserModel
 
 open class OrderInterractor(private val repo: OrderRepo) {
         fun create(order: OrderModel): OrderModel = repo.save(order)

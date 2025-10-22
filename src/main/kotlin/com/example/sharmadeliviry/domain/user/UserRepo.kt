@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.user
+package com.example.domain.user
 
 interface UserRepo {
     /**

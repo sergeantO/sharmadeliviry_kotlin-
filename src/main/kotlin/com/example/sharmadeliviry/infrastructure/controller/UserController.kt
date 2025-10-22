@@ -1,9 +1,9 @@
-package com.example.sharmadeliviry.presentation.controller
+package com.example.presentation.controller
 
-import com.example.sharmadeliviry.application.command.CreateUserCommand
-import com.example.sharmadeliviry.application.command.CreateUserRequest
-import com.example.sharmadeliviry.application.port.TransactionManager
-import com.example.sharmadeliviry.application.query.GetUserQuery
+import com.example.application.command.CreateUserCommand
+import com.example.application.command.CreateUserRequest
+import com.example.application.port.TransactionManager
+import com.example.application.query.GetUserQuery
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

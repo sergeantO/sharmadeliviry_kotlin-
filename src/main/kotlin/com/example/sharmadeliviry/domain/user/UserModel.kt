@@ -1,4 +1,4 @@
-package com.example.sharmadeliviry.domain.user
+package com.example.domain.user
 
 data class UserModel(
         val id: Long,
