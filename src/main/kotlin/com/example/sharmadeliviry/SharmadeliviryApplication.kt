@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class SharmadeliviryApplication
 
 fun main(args: Array<String>) {
-	runApplication<SharmadeliviryApplication>(*args)
+    runApplication<SharmadeliviryApplication>(*args)
 }

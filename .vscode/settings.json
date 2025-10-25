@@ -1,0 +1,10 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "editor.tabSize": 4,
+    "editor.rulers": [
+        100,
+        120
+    ],
+    "livePreview.defaultPreviewPath": "/build/reports/tests/test/index.html",
+    "java.compile.nullAnalysis.mode": "automatic",
+}

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "run docker container"
 docker run -d --rm\
   --name my-postgres \
   -e POSTGRES_USER=myuser \
@@ -8,10 +9,13 @@ docker run -d --rm\
   -p 5432:5432 \
   postgres:16.10-alpine
 
-echo "wait db run"
-sleep 5
+echo "wait 2 seconds to db run"
+sleep 2
 
-../gradlew flywayMigrate
-../gradlew jooqCodegen
+echo "run flywayMigrate"
+./gradlew flywayMigrate
+
+echo "run jooqCodegen"
+./gradlew jooqCodegen
 
 echo "DONE"
