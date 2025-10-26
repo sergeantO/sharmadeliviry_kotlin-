@@ -15,47 +15,23 @@ import com.example.domain.user.Email
 import com.example.domain.user.UpdateUserModel
 import com.example.domain.user.UserId
 import com.example.domain.user.UserModel
-
-inline fun <T, R> Result<T>.toResponseEntity(
-    successStatus: HttpStatus,
-    successTransform: (T) -> R?,
-): ResponseEntity<R> =
-    when {
-        isSuccess -> {
-            val result = successTransform(getOrNull()!!)
-            if (result != null) {
-                ResponseEntity.status(successStatus).body(result)
-            } else {
-                ResponseEntity.notFound().build()
-            }
-        }
-        else -> throw mapToException(exceptionOrNull())
-    }
-
-inline fun <T, R> Result<T>.toResponseEntity(successTransform: (T) -> R?): ResponseEntity<R> =
-    toResponseEntity(HttpStatus.OK, successTransform)
-
-fun mapToException(exception: Throwable?): Exception =
-    when (exception) {
-        else -> RuntimeException("Operation failed", exception)
-    }
-
-
+import com.example.infrastructure.shared.ResponseMapper
 
 @RestController
 @RequestMapping("/users")
 class UserController(
+    private val responseMapper: ResponseMapper,
     private val getUserQuery: GetUserQuery,
     private val getUserListQuery: GetUserListQuery,
     private val createUserCommand: CreateUserCommand,
     private val updateUserCommand: UpdateUserCommand,
     private val deleteUserCommand: DeleteUserCommand,
 ) {
-    @GetMapping
+    @GetMapping("/")
     suspend fun list(): ResponseEntity<List<UserDto>> =
         getUserListQuery
             .execute()
-            .toResponseEntity { users -> users.map { it.toDto() } }
+            .let { result -> responseMapper.toResponseEntity(result) { users -> users.map { it.toDto() } } }
 
     @GetMapping("/{id}")
     suspend fun get(
@@ -63,15 +39,15 @@ class UserController(
     ): ResponseEntity<UserDto> =
         getUserQuery
             .execute(UserId(id))
-            .toResponseEntity { it -> it?.toDto() }
+            .let { result -> responseMapper.toResponseEntity(result) { it -> it?.toDto() } }
 
-    @PostMapping
+    @PostMapping("/")
     suspend fun create(
         @RequestBody userDto: CreateUserDto,
     ): ResponseEntity<UserDto> =
         createUserCommand
             .execute(userDto.toModel())
-            .toResponseEntity(HttpStatus.CREATED) { model -> model.toDto() }
+            .let { result -> responseMapper.toResponseEntity(result, HttpStatus.CREATED) { model -> model.toDto() } }
 
     @PutMapping("/{id}")
     suspend fun update(
@@ -80,7 +56,7 @@ class UserController(
     ): ResponseEntity<UserDto> =
         updateUserCommand
             .execute(UserId(id), userDto.toModel())
-            .toResponseEntity { model -> model?.toDto() }
+            .let { result -> responseMapper.toResponseEntity(result) { it -> it?.toDto() } }
 
     @DeleteMapping("/{id}")
     suspend fun delete(

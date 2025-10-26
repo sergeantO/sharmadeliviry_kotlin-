@@ -43,9 +43,9 @@ class UserRepositoryComponentTest {
                 )
 
             // Act
-            val createdUser = userWriteRepo.create(transactionManager, createUserModel)
-            val readUser = userReadRepo.get(createdUser.id)
-            val readUserByEmail = userReadRepo.findByEmail(createdUser.email)
+            val createdUser = userWriteRepo.create(transactionManager, createUserModel).getOrNull()!!
+            val readUser = userReadRepo.get(createdUser.id).getOrNull()
+            val readUserByEmail = userReadRepo.findByEmail(createdUser.email).getOrNull()
 
             // Assert
             Assertions.assertNotNull(readUser)
@@ -63,21 +63,22 @@ class UserRepositoryComponentTest {
                     email = Email("test@example.com"),
                     password = "password123",
                 )
-            val createdUser = userWriteRepo.create(transactionManager, createUserModel)
+            val createdUser = userWriteRepo.create(transactionManager, createUserModel).getOrNull()!!
             val newEmail = Email("updated@example.com")
 
             // Act
             val updatedUser =
-                userWriteRepo.update(
-                    transactionManager,
-                    createdUser.id,
-                    UpdateUserModel(
-                        email = newEmail,
-                        username = null,
-                        password = null,
-                    ),
-                )
-            val readUpdatedUser = userReadRepo.get(createdUser.id)
+                userWriteRepo
+                    .update(
+                        transactionManager,
+                        createdUser.id,
+                        UpdateUserModel(
+                            email = newEmail,
+                            username = null,
+                            password = null,
+                        ),
+                    ).getOrNull()
+            val readUpdatedUser = userReadRepo.get(createdUser.id).getOrNull()
 
             // Assert
             Assertions.assertNotNull(updatedUser)
@@ -95,14 +96,14 @@ class UserRepositoryComponentTest {
                     email = Email("test@example.com"),
                     password = "password123",
                 )
-            val createdUser = userWriteRepo.create(transactionManager, createUserModel)
+            val createdUser = userWriteRepo.create(transactionManager, createUserModel).getOrNull()!!
 
             // Act
             val deleteResult = userWriteRepo.delete(transactionManager, createdUser.id)
-            val readDeletedUser = userReadRepo.get(createdUser.id)
+            val readDeletedUser = userReadRepo.get(createdUser.id).getOrNull()
 
             // Assert
-            Assertions.assertTrue(deleteResult)
+            Assertions.assertTrue(deleteResult.isSuccess)
             Assertions.assertNull(readDeletedUser)
         }
 
@@ -127,10 +128,10 @@ class UserRepositoryComponentTest {
 
             // Act
             val cleanupResult = userWriteRepo.cleanup(transactionManager)
-            val remainingUsers = userReadRepo.getAll()
+            val remainingUsers = userReadRepo.getAll().getOrNull()!!
 
             // Assert
-            Assertions.assertTrue(cleanupResult)
+            Assertions.assertTrue(cleanupResult.isSuccess)
             Assertions.assertTrue(remainingUsers.isEmpty())
         }
 }

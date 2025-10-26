@@ -1,5 +1,6 @@
 package com.example.infrastructure.shared
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 
@@ -7,23 +8,25 @@ import org.springframework.stereotype.Component
 class ResponseMapper(
     private val exceptionMapper: ExceptionMapper,
 ) {
-    fun <T> toResponseEntity(result: Result<T>): ResponseEntity<T> =
-        result.fold(
-            onSuccess = { ResponseEntity.ok(it) },
-            onFailure = { exceptionMapper.mapException(it) },
-        )
+    fun <T, R> toResponseEntity(
+        result: Result<T>,
+        successTransform: (T) -> R?,
+    ): ResponseEntity<R> = toResponseEntity(result, HttpStatus.OK, successTransform)
 
     fun <T, R> toResponseEntity(
         result: Result<T>,
-        transform: (T) -> R,
-    ): ResponseEntity<R> = toResponseEntity(result.map(transform))
-
-    fun <T> toResponseEntity(
-        result: Result<T>,
-        onSuccess: (T) -> ResponseEntity<T>,
-    ): ResponseEntity<T> =
-        result.fold(
-            onSuccess = { onSuccess(it) },
-            onFailure = { exceptionMapper.mapException(it) },
-        )
+        successStatus: HttpStatus,
+        successTransform: (T) -> R?,
+    ): ResponseEntity<R> =
+        when {
+            result.isSuccess -> {
+                val res = successTransform(result.getOrNull()!!)
+                if (res != null) {
+                    ResponseEntity.status(successStatus).body(res)
+                } else {
+                    ResponseEntity.notFound().build()
+                }
+            }
+            else -> exceptionMapper.mapException(result.exceptionOrNull())
+        }
 }

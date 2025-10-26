@@ -15,7 +15,7 @@ class UpdateUserCommand(
         user: UpdateUserModel,
     ): Result<UserModel?> {
         val foundUser = repo.get(tm, id)
-        if (foundUser == null) return Result.success(null)
+        if (foundUser.isFailure) return Result.success(null)
 
         return repo.update(tm, id, user)
     }

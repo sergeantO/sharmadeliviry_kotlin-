@@ -16,7 +16,7 @@ plugins {
     id("org.springframework.boot") version "3.5.+"
     id("io.spring.dependency-management") version "1.1.+"
     id("org.jetbrains.kotlinx.kover") version "0.9.+"
-    id("org.jooq.jooq-codegen-gradle") version "3.20.+"
+    id("org.jooq.jooq-codegen-gradle") version "3.19.+"
     id("org.flywaydb.flyway") version "11.14.+"
     id("org.openapi.generator") version "7.16.+"
     id("org.jlleitschuh.gradle.ktlint") version "13.1.+"
@@ -143,6 +143,7 @@ flyway {
 }
 
 jooq {
+    version = "3.20.+"
     configuration {
         jdbc {
             driver = "org.postgresql.Driver"

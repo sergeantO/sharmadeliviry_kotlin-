@@ -10,26 +10,24 @@ import org.slf4j.LoggerFactory
 
 @Component
 class ExceptionMapper {
-    fun <T> mapException(exception: Throwable): ResponseEntity<T> =
+    private val logger = LoggerFactory.getLogger(ExceptionMapper::class.java)
+
+    fun <T> mapException(exception: Throwable?): ResponseEntity<T> =
         when (exception) {
             is NotFoundException ->
                 ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(ErrorResponse(exception.message)) as ResponseEntity<T>
+                    .body(ErrorResponse(exception.message) as T)
             is ValidationException ->
                 ResponseEntity
                     .badRequest()
-                    .body(ErrorResponse(exception.message)) as ResponseEntity<T>
+                    .body(ErrorResponse(exception.message) as T)
             is AccessDeniedException -> ResponseEntity.status(HttpStatus.FORBIDDEN).build()
             else -> {
                 logger.error("Unhandled exception", exception)
                 ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
             }
         }
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(ExceptionMapper::class.java)
-    }
 }
 
 data class ErrorResponse(
