@@ -12,14 +12,9 @@ import com.example.application.user.query.GetUserListQuery
 import com.example.application.user.query.GetUserQuery
 import com.example.domain.TransactionManager
 import com.example.domain.user.UserWriteRepo
-import com.example.persistence.SpringTransactionManager
 
 @Configuration
 class AppConfig {
-    @Bean fun tm(transactionTemplate: TransactionTemplate): TransactionManager =
-        SpringTransactionManager(
-            transactionTemplate,
-        )
 
     @Bean fun getUserQuery(userReadRepo: UserReadRepo) = GetUserQuery(userReadRepo)
 

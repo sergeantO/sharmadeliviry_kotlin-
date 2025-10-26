@@ -18,7 +18,7 @@ import com.example.domain.user.UserModel
 import com.example.infrastructure.shared.ResponseMapper
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 class UserController(
     private val responseMapper: ResponseMapper,
     private val getUserQuery: GetUserQuery,
@@ -27,7 +27,8 @@ class UserController(
     private val updateUserCommand: UpdateUserCommand,
     private val deleteUserCommand: DeleteUserCommand,
 ) {
-    @GetMapping("/")
+
+    @GetMapping
     suspend fun list(): ResponseEntity<List<UserDto>> =
         getUserListQuery
             .execute()
@@ -41,7 +42,7 @@ class UserController(
             .execute(UserId(id))
             .let { result -> responseMapper.toResponseEntity(result) { it -> it?.toDto() } }
 
-    @PostMapping("/")
+    @PostMapping
     suspend fun create(
         @RequestBody userDto: CreateUserDto,
     ): ResponseEntity<UserDto> =
