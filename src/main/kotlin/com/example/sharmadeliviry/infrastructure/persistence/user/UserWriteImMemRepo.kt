@@ -3,7 +3,6 @@ package com.example.infrastructure.persistence.user
 import java.util.UUID
 import org.springframework.stereotype.Repository
 
-import com.example.domain.TransactionManager
 import com.example.domain.user.CreateUserModel
 import com.example.domain.user.UpdateUserModel
 import com.example.domain.user.UserId
@@ -15,15 +14,12 @@ import com.example.infrastructure.persistence.user.UserStorage
 class UserWriteImMemRepo(
     private val userStorage: UserStorage,
 ) : UserWriteRepo {
-    override fun get(
-        tm: TransactionManager,
-        userId: UserId,
-    ): Result<UserModel?> = Result.success(userStorage.users.find { it.id == userId })
+    override suspend fun getNextId(): UserId = UserId(UUID.randomUUID())
 
-    override fun create(
-        tm: TransactionManager,
-        user: CreateUserModel,
-    ): Result<UserModel> {
+    override suspend fun get(userId: UserId): Result<UserModel?> =
+        Result.success(userStorage.items.find { it.id == userId })
+
+    override suspend fun create(user: CreateUserModel): Result<UserModel> {
         val id = UserId(UUID.randomUUID())
         val newUser =
             UserModel(
@@ -31,40 +27,36 @@ class UserWriteImMemRepo(
                 username = user.username,
                 email = user.email,
             )
-        userStorage.users.add(newUser)
+        userStorage.items.add(newUser)
         return Result.success(newUser)
     }
 
-    override fun update(
-        tm: TransactionManager,
+    override suspend fun update(
         id: UserId,
         user: UpdateUserModel,
     ): Result<UserModel?> {
-        val foundIdx = userStorage.users.indexOfFirst { it.id == id }
+        val foundIdx = userStorage.items.indexOfFirst { it.id == id }
         if (foundIdx == -1) return Result.success(null)
 
-        val oldUser = userStorage.users[foundIdx]
+        val oldUser = userStorage.items[foundIdx]
         val newUser =
             UserModel(
                 id = id,
                 username = oldUser.username,
                 email = user.email ?: oldUser.email,
             )
-        userStorage.users[foundIdx] = newUser
+        userStorage.items[foundIdx] = newUser
         return Result.success(newUser)
     }
 
-    override fun delete(
-        tm: TransactionManager,
-        id: UserId,
-    ): Result<Boolean> {
-        val user = userStorage.users.find { it.id == id }
-        userStorage.users.remove(user)
+    override suspend fun delete(id: UserId): Result<Boolean> {
+        val user = userStorage.items.find { it.id == id }
+        userStorage.items.remove(user)
         return Result.success(true)
     }
 
-    override fun cleanup(tm: TransactionManager): Result<Boolean> {
-        userStorage.users.clear()
+    override suspend fun cleanup(): Result<Boolean> {
+        userStorage.items.clear()
         return Result.success(true)
     }
 }

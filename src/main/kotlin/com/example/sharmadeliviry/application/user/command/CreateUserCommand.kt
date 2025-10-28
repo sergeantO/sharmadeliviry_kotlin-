@@ -9,5 +9,8 @@ class CreateUserCommand(
     private val tm: TransactionManager,
     private val repo: UserWriteRepo,
 ) {
-    suspend fun execute(user: CreateUserModel): Result<UserModel> = repo.create(tm, user)
+    suspend fun execute(user: CreateUserModel): Result<UserModel> =
+        tm.inTransaction {
+            repo.create(user)
+        }
 }

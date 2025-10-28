@@ -28,6 +28,8 @@ class UserRepositoryComponentTest {
         transactionManager =
             object : TransactionManager {
                 override suspend fun <T> inTransaction(block: suspend () -> T): T = runBlocking { block() }
+
+                override suspend fun inUnitTransaction(block: suspend () -> Unit): Unit = runBlocking { block() }
             }
     }
 
@@ -43,7 +45,7 @@ class UserRepositoryComponentTest {
                 )
 
             // Act
-            val createdUser = userWriteRepo.create(transactionManager, createUserModel).getOrNull()!!
+            val createdUser = userWriteRepo.create(createUserModel).getOrNull()!!
             val readUser = userReadRepo.get(createdUser.id).getOrNull()
             val readUserByEmail = userReadRepo.findByEmail(createdUser.email).getOrNull()
 
@@ -63,14 +65,13 @@ class UserRepositoryComponentTest {
                     email = Email("test@example.com"),
                     password = "password123",
                 )
-            val createdUser = userWriteRepo.create(transactionManager, createUserModel).getOrNull()!!
+            val createdUser = userWriteRepo.create(createUserModel).getOrNull()!!
             val newEmail = Email("updated@example.com")
 
             // Act
             val updatedUser =
                 userWriteRepo
                     .update(
-                        transactionManager,
                         createdUser.id,
                         UpdateUserModel(
                             email = newEmail,
@@ -96,10 +97,10 @@ class UserRepositoryComponentTest {
                     email = Email("test@example.com"),
                     password = "password123",
                 )
-            val createdUser = userWriteRepo.create(transactionManager, createUserModel).getOrNull()!!
+            val createdUser = userWriteRepo.create(createUserModel).getOrNull()!!
 
             // Act
-            val deleteResult = userWriteRepo.delete(transactionManager, createdUser.id)
+            val deleteResult = userWriteRepo.delete(createdUser.id)
             val readDeletedUser = userReadRepo.get(createdUser.id).getOrNull()
 
             // Assert
@@ -123,11 +124,11 @@ class UserRepositoryComponentTest {
                     email = Email("test2@example.com"),
                     password = "password123",
                 )
-            userWriteRepo.create(transactionManager, createUserModel1)
-            userWriteRepo.create(transactionManager, createUserModel2)
+            userWriteRepo.create(createUserModel1)
+            userWriteRepo.create(createUserModel2)
 
             // Act
-            val cleanupResult = userWriteRepo.cleanup(transactionManager)
+            val cleanupResult = userWriteRepo.cleanup()
             val remainingUsers = userReadRepo.getAll().getOrNull()!!
 
             // Assert

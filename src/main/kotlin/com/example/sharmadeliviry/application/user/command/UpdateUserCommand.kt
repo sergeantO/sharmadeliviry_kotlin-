@@ -13,10 +13,13 @@ class UpdateUserCommand(
     suspend fun execute(
         id: UserId,
         user: UpdateUserModel,
-    ): Result<UserModel?> {
-        val foundUser = repo.get(tm, id)
-        if (foundUser.isFailure) return Result.success(null)
+    ): Result<UserModel?> =
+        tm.inTransaction({
+            val foundUser = repo.get(id)
+            if (foundUser.isFailure) {
+                Result.success(null)
+            }
 
-        return repo.update(tm, id, user)
-    }
+            repo.update(id, user)
+        })
 }

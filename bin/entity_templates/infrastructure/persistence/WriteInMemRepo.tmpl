@@ -1,25 +1,43 @@
 package ${PACKAGE}.infrastructure.persistence.${ENTITY_LOWERCASE}
 
+import java.util.UUID
 import org.springframework.stereotype.Repository
 
-import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.Create${ENTITY}Model
-import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.Update${ENTITY}Model
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Id
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
+import ${PACKAGE}.infrastructure.persistence.${ENTITY_LOWERCASE}.${ENTITY}Storage
 
 @Repository
-class ${ENTITY}InMemWriteRepo : ${ENTITY}WriteRepo {
-    
-    private val items = mutableListOf<${ENTITY}Model>()
+class ${ENTITY}WriteInMemRepo(
+    private val ${ENTITY_LOWERCASE}Storage: ${ENTITY}Storage,
+) : ${ENTITY}WriteRepo {
+    override suspend fun getNextId(): ${ENTITY}Id = ${ENTITY}Id(UUID.randomUUID())
 
-    /** Создать запись */
-    override suspend fun create(id: ${ENTITY}Id, createModel: Create${ENTITY}Model): ${ENTITY}Model {
-        val newItem = ${ENTITY}Model(id, createModel.name)
-        items.add(newItem)
-        return newItem
+    override suspend fun get(${ENTITY_LOWERCASE}Id: ${ENTITY}Id): Result<${ENTITY}Model?> =
+        Result.success(${ENTITY_LOWERCASE}Storage.items.find { it.id == ${ENTITY_LOWERCASE}Id })
+
+    override suspend fun create(${ENTITY_LOWERCASE}: Create${ENTITY}Model): Result<${ENTITY}Model> {
+        val id = ${ENTITY}Id(UUID.randomUUID())
+        val new${ENTITY} =
+            ${ENTITY}Model(
+                id = id,
+                name = ${ENTITY_LOWERCASE}.name,
+            )
+        ${ENTITY_LOWERCASE}Storage.items.add(new${ENTITY})
+        return Result.success(new${ENTITY})
     }
 
-    override suspend fun get(id: ${ENTITY}Id): ${ENTITY}Model? {
-        return items.find { it.id == id }
+    override suspend fun delete(id: ${ENTITY}Id): Result<Boolean> {
+        val ${ENTITY_LOWERCASE} = ${ENTITY_LOWERCASE}Storage.items.find { it.id == id }
+        ${ENTITY_LOWERCASE}Storage.items.remove(${ENTITY_LOWERCASE})
+        return Result.success(true)
+    }
+
+    override suspend fun cleanup(): Result<Boolean> {
+        ${ENTITY_LOWERCASE}Storage.items.clear()
+        return Result.success(true)
     }
 }

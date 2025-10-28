@@ -5,7 +5,6 @@ import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Component
 
 import com.example.domain.TransactionManager
-import org.jooq.DSLContext
 import org.jooq.impl.DSL
 
 @Component

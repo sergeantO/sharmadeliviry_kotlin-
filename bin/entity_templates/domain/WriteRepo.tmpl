@@ -1,15 +1,18 @@
 package ${PACKAGE}.domain.${ENTITY_LOWERCASE}
 
-import java.util.UUID
-
 interface ${ENTITY}WriteRepo {
-
     /** Сгенерировать новый id */
-    suspend fun getNextId(): ${ENTITY}Id = ${ENTITY}Id(UUID.randomUUID())
+    suspend fun getNextId(): ${ENTITY}Id
+
+    /** Получить запись по id */
+    suspend fun get(${ENTITY_LOWERCASE}Id: ${ENTITY}Id): Result<${ENTITY}Model?>
 
     /** Создать запись */
-    suspend fun create(id: ${ENTITY}Id, createModel: Create${ENTITY}Model): ${ENTITY}Model
+    suspend fun create(${ENTITY_LOWERCASE}: Create${ENTITY}Model): Result<${ENTITY}Model>
 
-    /** Получить запись */
-    suspend fun get(id: ${ENTITY}Id): ${ENTITY}Model?
+    /** Удалить запись */
+    suspend fun delete(id: ${ENTITY}Id): Result<Boolean>
+
+    /** Очистить репозиторий */
+    suspend fun cleanup(): Result<Boolean>
 }

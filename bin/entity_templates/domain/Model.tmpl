@@ -2,7 +2,9 @@ package ${PACKAGE}.domain.${ENTITY_LOWERCASE}
 
 import java.util.UUID
 
-@JvmInline value class ${ENTITY}Id(val id: UUID)
+@JvmInline value class ${ENTITY}Id(
+    val value: UUID,
+)
 
 data class ${ENTITY}Model(
     val id: ${ENTITY}Id,
@@ -10,5 +12,5 @@ data class ${ENTITY}Model(
 )
 
 data class Create${ENTITY}Model(
-   val name: String,
+    val name: String,
 )

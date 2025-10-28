@@ -27,7 +27,6 @@ class UserController(
     private val updateUserCommand: UpdateUserCommand,
     private val deleteUserCommand: DeleteUserCommand,
 ) {
-
     @GetMapping
     suspend fun list(): ResponseEntity<List<UserDto>> =
         getUserListQuery

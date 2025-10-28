@@ -8,5 +8,5 @@ class DeleteUserCommand(
     private val tm: TransactionManager,
     private val repo: UserWriteRepo,
 ) {
-    suspend fun execute(id: UserId): Result<Boolean> = repo.delete(tm, id)
+    suspend fun execute(id: UserId): Result<Boolean> = tm.inTransaction { repo.delete(id) }
 }

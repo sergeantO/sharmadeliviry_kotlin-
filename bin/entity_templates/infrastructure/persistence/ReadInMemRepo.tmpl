@@ -3,15 +3,20 @@ package ${PACKAGE}.infrastructure.persistence.${ENTITY_LOWERCASE}
 import org.springframework.stereotype.Repository
 
 import ${PACKAGE}.application.${ENTITY_LOWERCASE}.${ENTITY}ReadRepo
-import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Id
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
 
 @Repository
-class ${ENTITY}InMemReadRepo : ${ENTITY}ReadRepo {
-    
-    private val items = mutableListOf<${ENTITY}Model>()
+class ${ENTITY}ReadInMemRepo(
+    private val ${ENTITY_LOWERCASE}Storage: ${ENTITY}Storage,
+) : ${ENTITY}ReadRepo {
+    override suspend fun getAll(): Result<List<${ENTITY}Model>> =
+        Result.success(${ENTITY_LOWERCASE}Storage.items)
 
-    override suspend fun get(id: ${ENTITY_LOWERCASE}Id): ${ENTITY}Model? {
-        return items.find { it.id == ${ENTITY_LOWERCASE}Id }
-    }
+    override suspend fun get(${ENTITY_LOWERCASE}Id: ${ENTITY}Id): Result<${ENTITY}Model?> =
+        Result.success(
+            ${ENTITY_LOWERCASE}Storage.items.find { ${ENTITY_LOWERCASE} ->
+                ${ENTITY_LOWERCASE}.id == ${ENTITY_LOWERCASE}Id
+            },
+        )
 }

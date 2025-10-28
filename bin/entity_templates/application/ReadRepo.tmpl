@@ -4,6 +4,9 @@ import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Id
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
 
 interface ${ENTITY}ReadRepo {
-    /** получить запись */
-    suspend fun get(id: ${ENTITY}Id): ${ENTITY}Model?
+    /** Получить все записи */
+    suspend fun getAll(): Result<List<${ENTITY}Model>>
+    
+    /** Получить запись по id */
+    suspend fun get(${ENTITY_LOWERCASE}Id: ${ENTITY}Id): Result<${ENTITY}Model?>
 }

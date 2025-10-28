@@ -11,19 +11,19 @@ import com.example.domain.user.UserModel
 class UserReadImMemRepo(
     private val userStorage: UserStorage,
 ) : UserReadRepo {
-    override fun getAll(): Result<List<UserModel>> = Result.success(userStorage.users)
+    override suspend fun getAll(): Result<List<UserModel>> = Result.success(userStorage.items)
 
-    override fun get(userId: UserId): Result<UserModel?> =
+    override suspend fun get(userId: UserId): Result<UserModel?> =
         Result.success(
-            userStorage.users.find { user ->
+            userStorage.items.find { user ->
                 user.id ==
                     userId
             },
         )
 
-    override fun findByEmail(email: Email): Result<UserModel?> =
+    override suspend fun findByEmail(email: Email): Result<UserModel?> =
         Result.success(
-            userStorage.users.find { user ->
+            userStorage.items.find { user ->
                 user.email ==
                     email
             },

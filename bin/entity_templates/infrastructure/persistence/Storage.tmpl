@@ -1,0 +1,10 @@
+package ${PACKAGE}.infrastructure.persistence.${ENTITY_LOWERCASE}
+
+import org.springframework.stereotype.Component
+
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+
+@Component
+class ${ENTITY}Storage {
+    val items = mutableListOf<${ENTITY}Model>()
+}

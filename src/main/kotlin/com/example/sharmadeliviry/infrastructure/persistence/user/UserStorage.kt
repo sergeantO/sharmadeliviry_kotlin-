@@ -6,5 +6,5 @@ import com.example.domain.user.UserModel
 
 @Component
 class UserStorage {
-    val users = mutableListOf<UserModel>()
+    val items = mutableListOf<UserModel>()
 }

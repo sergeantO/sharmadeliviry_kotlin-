@@ -1,28 +1,24 @@
 package com.example.domain.user
 
-import com.example.domain.TransactionManager
-
 interface UserWriteRepo {
-    fun get(
-        tm: TransactionManager,
-        userId: UserId,
-    ): Result<UserModel?>
+    /** Сгенерировать новый id */
+    suspend fun getNextId(): UserId
 
-    fun create(
-        tm: TransactionManager,
-        user: CreateUserModel,
-    ): Result<UserModel>
+    /** Получить запись по id */
+    suspend fun get(userId: UserId): Result<UserModel?>
 
-    fun update(
-        tm: TransactionManager,
+    /** Создать запись */
+    suspend fun create(user: CreateUserModel): Result<UserModel>
+
+    /** Обновить запись */
+    suspend fun update(
         id: UserId,
         user: UpdateUserModel,
     ): Result<UserModel?>
 
-    fun delete(
-        tm: TransactionManager,
-        id: UserId,
-    ): Result<Boolean>
+    /** Удалить запись */
+    suspend fun delete(id: UserId): Result<Boolean>
 
-    fun cleanup(tm: TransactionManager): Result<Boolean>
+    /** Очистить репозиторий */
+    suspend fun cleanup(): Result<Boolean>
 }

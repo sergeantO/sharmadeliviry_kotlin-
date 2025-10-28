@@ -5,9 +5,9 @@ import com.example.domain.user.UserId
 import com.example.domain.user.UserModel
 
 interface UserReadRepo {
-    fun getAll(): Result<List<UserModel>>
+    suspend fun getAll(): Result<List<UserModel>>
 
-    fun get(userId: UserId): Result<UserModel?>
+    suspend fun get(userId: UserId): Result<UserModel?>
 
-    fun findByEmail(email: Email): Result<UserModel?>
+    suspend fun findByEmail(email: Email): Result<UserModel?>
 }

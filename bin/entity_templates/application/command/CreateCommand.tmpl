@@ -1,13 +1,16 @@
 package ${PACKAGE}.application.${ENTITY_LOWERCASE}.command
 
+import ${PACKAGE}.domain.TransactionManager
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.Create${ENTITY}Model
-import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
 import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}Model
+import ${PACKAGE}.domain.${ENTITY_LOWERCASE}.${ENTITY}WriteRepo
 
-class Create${ENTITY}Command {
-    suspend fun execute(${ENTITY_LOWERCASE}WriteRepo: ${ENTITY}WriteRepo, body: Create${ENTITY}Model): ${ENTITY}Model {
-        val id = ${ENTITY_LOWERCASE}WriteRepo.getNextId()
-        val result = ${ENTITY_LOWERCASE}WriteRepo.create(id, body)
-        return result
-    }
+class Create${ENTITY}Command(
+    private val tm: TransactionManager,
+    private val repo: ${ENTITY}WriteRepo,
+) {
+    suspend fun execute(${ENTITY_LOWERCASE}: Create${ENTITY}Model): Result<${ENTITY}Model> =
+        tm.inTransaction { 
+            repo.create(${ENTITY_LOWERCASE}) 
+        }
 }

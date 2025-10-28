@@ -2,7 +2,6 @@ package com.example.conf
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.transaction.support.TransactionTemplate
 
 import com.example.application.user.UserReadRepo
 import com.example.application.user.command.CreateUserCommand
@@ -15,7 +14,6 @@ import com.example.domain.user.UserWriteRepo
 
 @Configuration
 class AppConfig {
-
     @Bean fun getUserQuery(userReadRepo: UserReadRepo) = GetUserQuery(userReadRepo)
 
     @Bean fun getUserListQuery(userReadRepo: UserReadRepo) = GetUserListQuery(userReadRepo)
