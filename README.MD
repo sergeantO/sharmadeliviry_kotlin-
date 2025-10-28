@@ -148,14 +148,9 @@ src/main/
 - Маппинг между внешними и внутренними моделями
 
 ## Принципы разработки
-Принципы разработки вдохновлены компилятором Rust — максимальный перенос ошибок на этап компиляции. Используем типобезопасные конструкции:
-```kotlin
-// Вместо сырых типов - явные доменные типы
-val orderId: OrderId = OrderId(1L)  // вместо Long
-val amount: Money = Money.of("100.00", "USD")  // вместо BigDecimal
-```
+Принципы разработки вдохновлены компилятором Rust — максимальный перенос ошибок на этап компиляции. 
 
-Также в Rust существуют 2 ключевые структуры
+В Rust для этого существуют 2 ключевые структуры
 ```rust
 enum Option<T> {
     None,
@@ -170,101 +165,42 @@ enum Result<T, E> {
 
 В Kotlin не требуется структура Option, т.к. язык обеспечивает null safety и компилятор не позволит передать Int? вместо Int. Result уже присутствует в stdlib. Явная обработка ошибок через Result (или Either) не позволяет им просочиться незаметно, делает поток выполнения предсказуемым и упрощает тестирование.
 
+Также используем типобезопасные конструкции:
+```kotlin
+// Вместо сырых типов - явные доменные типы
+val orderId: OrderId = OrderId(1L)  // вместо Long
+val amount: Money = Money.of("100.00", "USD")  // вместо BigDecimal
+```
+
 ## Минималичтичные и выразительные контроллеры
 
 ```kotlin
 @RestController
 class UserController(
-    private val userService: UserService,
-    private val responseMapper: ResponseMapper
+    private val responseMapper: ResponseMapper,
+    private val getUserQuery: GetUserQuery,
+    private val getUserListQuery: GetUserListQuery,
+    private val createUserCommand: CreateUserCommand,
 ) : UserApi {
 
     // Простой случай
     override suspend fun getUserById(id: Long): ResponseEntity<User> {
-        return userService.getUser(id)
-            .let { responseMapper.toResponseEntity(it) }
-    }
-    
-    // С преобразованием в DTO
-    override suspend fun getUserProfile(id: Long): ResponseEntity<UserProfileDto> {
-        return userService.getUser(id)
-            .map { it.toResponse() }
-            .let { responseMapper.toResponseEntity(it) }
+        return getUserListQuery
+            .execute()
+            .let { result -> responseMapper.toResponseEntity(result) { users -> users.map { it.toDto() } } }
     }
     
     // С кастомным успешным статусом
     override suspend fun createUser(request: CreateUserRequest): ResponseEntity<User> {
-        return userService.createUser(request)
-            .let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
-    }
-    
-    // Более сложная логика с композицией
-    override suspend fun getUserWithStats(id: Long): ResponseEntity<UserWithStatsDto> {
-        return userService.getUserWithStats(id)
-            .map { user -> 
-                UserWithStatsDto(
-                    user = user.toResponse(),
-                    stats = user.calculateStats()
-                )
-            }
-            .let { responseMapper.toResponseEntity(it) }
+        return createUserCommand
+            .execute(userDto.toModel())
+            .let { result -> responseMapper.toResponseEntity(result, HttpStatus.CREATED) { model -> model.toDto() } }
     }
 }
 ```
 
-Достигается такой минимализм двумя компонентами
-```kotlin
-// Унифицированная обработка ошибок
-@Component
-class ExceptionMapper {
-    
-    fun <T> mapException(exception: Throwable): ResponseEntity<T> {
-        return when (exception) {
-            is UserNotFoundException -> ResponseEntity.notFound().build()
-            is ValidationException -> ResponseEntity.badRequest()
-                .body(ErrorResponse(exception.message)) as ResponseEntity<T>
-            is AccessDeniedException -> ResponseEntity.status(HttpStatus.FORBIDDEN).build()
-            is BusinessException -> ResponseEntity.unprocessableEntity()
-                .body(ErrorResponse(exception.message)) as ResponseEntity<T>
-            else -> {
-                logger.error("Unhandled exception", exception)
-                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
-            }
-        }
-    }
-    
-    companion object {
-        private val logger = LoggerFactory.getLogger(ExceptionMapper::class.java)
-    }
-}
+Достигается такой минимализм двумя компонентами: `ExceptionMapper` и `ResponseMapper`, расположенных в `infrastructure/shared`
 
-data class ErrorResponse(val message: String?, val timestamp: Long = System.currentTimeMillis())
-
-// Унифицированная обработка ответов
-@Component
-class ResponseMapper(private val exceptionMapper: ExceptionMapper) {
-    
-    fun <T> Result<T>.toResponseEntity(): ResponseEntity<T> {
-        return fold(
-            onSuccess = { ResponseEntity.ok(it) },
-            onFailure = { exceptionMapper.mapException(it) }
-        )
-    }
-    
-    fun <T, R> Result<T>.toResponseEntity(transform: (T) -> R): ResponseEntity<R> {
-        return map(transform).toResponseEntity()
-    }
-    
-    fun <T> Result<T>.toResponseEntity(
-        onSuccess: (T) -> ResponseEntity<T>
-    ): ResponseEntity<T> {
-        return fold(
-            onSuccess = { onSuccess(it) },
-            onFailure = { exceptionMapper.mapException(it) }
-        )
-    }
-}
-```
 
 ## bin
 В папке bin находятся bash скрипты, используемые для разработки (`I use  Arch, btw`)
@@ -302,10 +238,10 @@ class ResponseMapper(private val exceptionMapper: ExceptionMapper) {
 
 | Тип тестов | Усилия | Назначение & Подход |
 | :--- | :--- | :--- |
-| **Domain Tests** | 15% | **Проверка бизнес-правил и инвариантов.**<br>• Фокус на корректности создания value-типов (`Money`, `OrderId`).<br>• Тестирование методов доменных моделей, обеспечивающих соблюдение инвариантов. |
 | **Application Tests (InMemory)** | 50% | **Главные тесты на пользовательские сценарии (Use Cases).**<br>• Использование `InMemory`-реализаций репозиториев для изоляции и скорости.<br>• Проверка orchestration-логики: валидация, создание доменных объектов, вызов портов, обработка ошибок. |
+| **Domain Tests** | 20% | **Проверка бизнес-правил и инвариантов.**<br>• Фокус на корректности создания value-типов (`Money`, `OrderId`).<br>• Тестирование методов доменных моделей, обеспечивающих соблюдение инвариантов. |
 | **DB Tests** | 20% | **Проверка маппинга и SQL-запросов.**<br>• Использование Testcontainers для поднятия реальной PostgreSQL.<br>• Проверка, что JOOQ-запросы корректно маппят объекты в строки и обратно. |
-| **API Tests (Rest Assured)** | 15% | **Формальная проверка HTTP-контрактов.**<br>• Проверка кодов статуса, структуры JSON-ответов, заголовков.<br>• Так как контроллеры тонкие, эти тесты становятся формальностью, проверяющей "проводку". |
+| **API Tests (Rest Assured)** | 10% | **Формальная проверка HTTP-контрактов.**<br>• Проверка кодов статуса, структуры JSON-ответов, заголовков.<br>• Так как контроллеры тонкие, эти тесты становятся формальностью, проверяющей "проводку". |
 
 ### Советы по тестированию
 
