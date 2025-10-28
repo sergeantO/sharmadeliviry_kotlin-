@@ -174,6 +174,11 @@ val amount: Money = Money.of("100.00", "USD")  // вместо BigDecimal
 
 ## Минималичтичные и выразительные контроллеры
 
+Контроллер не должен содержать никакий логики, кроме 
+1. конвертации DTO во внутреннее представление
+2. Вызов команды/запроса
+3. конвертация ответа в DTO
+
 ```kotlin
 @RestController
 class UserController(
@@ -184,17 +189,21 @@ class UserController(
 ) : UserApi {
 
     // Простой случай
-    override suspend fun getUserById(id: Long): ResponseEntity<User> {
-        return getUserListQuery
-            .execute()
-            .let { result -> responseMapper.toResponseEntity(result) { users -> users.map { it.toDto() } } }
+    override suspend fun get(
+        @PathVariable("id") id: UUID,
+    ): ResponseEntity<UserDto> {
+        getUserQuery
+            .execute(UserId(id))
+            .let { result -> responseMapper.toResponseEntity(result) { it?.toDto() } }
     }
     
     // С кастомным успешным статусом
-    override suspend fun createUser(request: CreateUserRequest): ResponseEntity<User> {
+    override suspend fun createUser(
+        @RequestBody userDto: CreateUserDto,
+    ): ResponseEntity<UserDto> {
         return createUserCommand
             .execute(userDto.toModel())
-            .let { result -> responseMapper.toResponseEntity(result, HttpStatus.CREATED) { model -> model.toDto() } }
+            .let { result -> responseMapper.toResponseEntity(result, HttpStatus.CREATED) { it.toDto() } }
     }
 }
 ```
